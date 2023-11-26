@@ -1,0 +1,14 @@
+{
+  "editor.formatOnSave": true,
+  "python.formatting.provider": "black",
+  "python.linting.pylintEnabled": false,
+  "emmet.includeLanguages": {
+    "django-html": "html"
+  },
+  "files.autoSave": "onFocusChange",
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.python"
+  },
+  "editor.tabSize": 4,
+  "editor.detectIndentation": false
+}
