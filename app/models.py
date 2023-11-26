@@ -1,8 +1,7 @@
 from database import queries 
 import click 
 
-
-    
+   
 class Customer():
     def __init__(self):
         self.table_name = 'customer' 

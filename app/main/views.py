@@ -1,8 +1,62 @@
 from datetime import datetime
-from flask import render_template, session, redirect, url_for
+from flask import render_template, session, redirect, url_for, jsonify, request
 from . import main
-
+from database import queries
 
 @main.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template('home.html')
+    results = queries.select_data_table('customer')
+    return jsonify({"results": results})
+
+
+@main.route('/get_customer/', methods=['GET', 'POST'])
+def get_customer():
+    customer_id = request.args.get('customer_id', type=int)
+
+    if customer_id is None:
+        return jsonify({"error": "Missing customer_id parameter"}), 400
+
+    results = queries.select_data_table('customer', filters=[('id', customer_id)])
+    return jsonify({"customer data": results})
+
+
+@main.route('/add_customer/', methods=['POST'])
+def add_customer():
+    columns = request.json.get('columns')
+    values = request.json.get('values')
+
+    if columns is None or values is None:
+        return jsonify({"error": "Missing columns or values parameter"}), 400
+
+    table_name = 'customer'
+    success = queries.add_data_table(table_name, columns, values)
+
+    if success:
+        return jsonify({"message": "Data added successfully"})
+    else:
+        return jsonify({"error": "Failed to add data"}), 500
+
+
+
+@main.route('/update_customer/', methods=['POST'])
+def update_customer():
+    customer_id = request.json.get('customer_id')
+    values = request.json.get('values')
+    print(values)
+    if customer_id is None or values is None:
+        return jsonify({"error": "Missing customer_id or values parameter"}), 400
+
+    results = queries.update_data_table('customer', filters=[('id', customer_id)], columns=values)
+    
+    return jsonify({"query result": results})
+
+
+@main.route('/delete_customer/', methods=['POST'])
+def delete_customer():
+    customer_id = request.json.get('customer_id')
+
+    if customer_id is None:
+        return jsonify({"error": "Missing customer_id parameter"}), 400
+
+    results = queries.delete_data_table('customer', customer_id)
+    return jsonify({"query result": results})
