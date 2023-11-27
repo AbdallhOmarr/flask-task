@@ -2,7 +2,6 @@
 ## creating database
 def create_db():
     from app import mysql 
-
     print("database created")
     cursor = mysql.connection.cursor()
     query = "CREATE DATABASE car_rent_db_dev;"
@@ -66,7 +65,12 @@ def select_data_table(table_name,columns='*',filters=None):
                 
         print(query)
         cursor.execute(query)
-        results= cursor.fetchall()
+        
+        # Get column names
+        column_names = [col[0] for col in cursor.description]
+
+        # Organize data into a list of dictionaries
+        results = [dict(zip(column_names, row)) for row in cursor.fetchall()]
         cursor.close()
 
         # Return results if the query is executed successfully
