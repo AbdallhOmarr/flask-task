@@ -19,7 +19,6 @@ class DevelopmentConfig(Config):
     MYSQL_URL = 'mysql://root:3agD-Fdc3GgadFbg23hf2Aac6ce-1g6a@mysql.railway.internal:3306/railway'
     
  
-    # datbase url for development
 class TestingConfig(Config):
     DEBUG = False 
         
